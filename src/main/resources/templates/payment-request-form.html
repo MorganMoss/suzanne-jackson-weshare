@@ -1,0 +1,134 @@
+<!DOCTYPE HTML>
+<html
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{/layout.html}">
+<head></head>
+<body>
+    <div layout:fragment="contents">
+        <h1>Submit a Payment Request for the Following Expense</h1>
+
+        <table>
+            <tr>
+                <td> Date </td>
+                <td id="expense_date" > <span th:text="${expense_date}" th:remove="tag"> </span> </td>
+            </tr>
+            <tr>
+                <td> Description </td>
+                <td id="expense_description"> <span th:text="${expense_description}" th:remove="tag"> </span> </td>
+            </tr>
+            <tr>
+                <td> Amount </td>
+                <td id="expense_amount"> <span th:text="${expense_amount}" th:remove="tag"> </span> </td>
+            </tr>
+        </table>
+
+        <br>
+
+        <form method="post" action="/payment-request.action" enctype="application/x-www-form-urlencoded">
+            <input type="hidden" id="expense_UUID" name="expense_UUID" th:value="${expense_UUID}">
+            <label for="email">The recipient's email
+                <br>
+                <input type="email" id="email" name="email" required autofocus />
+                <br>
+            </label>
+            <br>
+
+            <label for="amount">The amount they should pay (Maximum
+                <span th:text="${expense_amount}" th:remove="tag"> </span>
+                )
+                <br>
+                <input type="currency" id="amount" name="amount" th:max="${expense_amount}" required>
+                <br>
+            </label>
+            <br>
+
+            <label for="amount">By when must this claim be settled (dd/mm/yyyy)
+                <br>
+                <input type="date" id="due-date" name="due-date" required>
+                <br>
+            </label>
+            <br>
+
+            <button type="submit" class="button" name="submit" value="Submit"> Submit </button>
+        </form>
+
+        <!-- Script for better currency formatting -->
+        <script>
+            const currencyInput = document.querySelectorAll('input[type="currency"]');
+            const currency = 'ZAR';
+            const options = {
+                maximumFractionDigits: 2,
+                currency: currency,
+                style: "currency",
+                currencyDisplay: "symbol",
+            };
+
+            for (let i = 0; i < currencyInput.length; i++ ) {
+                onBlur({
+                    target: currencyInput[i]
+                })
+
+                currencyInput[i].addEventListener('focus', onFocus)
+                currencyInput[i].addEventListener('blur', onBlur)
+
+                /**
+                 * Takes the maximum between the current value
+                 * and the assigned maximum attribute
+                 * and sets that as the value for the target of e
+                 * @param e the element
+                 */
+                function maximum(e){
+                    if (e.target.hasAttribute("max")){
+                        const max_value = localStringToNumber(e.target.getAttribute("max"));
+                        if (localStringToNumber( e.target.value ) > max_value){
+                            e.target.value = max_value;
+                        }
+                    }
+                }
+
+                /**
+                 * Formats the input value to have currency formatting, with two decimals
+                 * controlled by the options variable
+                 * @param e the element
+                 */
+                function format(e) {
+                    const value = e.target.value;
+
+                    e.target.value = ( value || localStringToNumber(value) === 0 ) ?
+                        localStringToNumber( value ).toLocaleString( undefined, options ) :
+                        ''
+                }
+                /**
+                 * String to number, Strips all characters, excluding '.' and numbers
+                 * @param s string to be converted
+                 * @returns {number} a number derived from that string
+                 */
+                function localStringToNumber( s ) {
+                    return Number( String( s ).replace( /[^0-9.-]+/g, "" ) )
+                }
+
+                /**
+                 * What gets done when you focus on the input
+                 * Makes the value into a raw number, removing all formatting
+                 * @param e the element
+                 */
+                function onFocus( e ) {
+                    const value = e.target.value;
+                    e.target.value = value ? localStringToNumber( value ) : ''
+                }
+
+                /**
+                 * What gets done when you click away from the input
+                 * Formats the value in the input.
+                 * @param e the element
+                 */
+                function onBlur( e ) {
+                    maximum(e);
+                    format(e);
+                }
+            }
+        </script>
+    </div>
+</body>
+</html>
