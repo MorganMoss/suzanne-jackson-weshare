@@ -88,10 +88,10 @@ public class PaymentRequestController {
         Optional<Person> person = personDAO.findPersonByEmail(context.formParam("email"));
 
         if (expense.isPresent() && person.isPresent()){
-            PaymentRequest paymentRequest = expense.get().requestPayment(
-                    person.get(),
-                    complexStringToMoney(Objects.requireNonNull(context.formParam("amount"))),
-                    stringToDate(context.formParam("due-date"))
+            expense.get().requestPayment(
+                person.get(),
+                complexStringToMoney(Objects.requireNonNull(context.formParam("amount"))),
+                stringToDate(context.formParam("due-date"))
             );
         }
 
