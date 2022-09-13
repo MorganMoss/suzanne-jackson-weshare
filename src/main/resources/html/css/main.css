@@ -18,7 +18,7 @@ form {
 form.inline {
   padding: 0;
   width:33%;
-  background-color #fff;
+  background-color: #fff;
 }
 
 input.inline[type=submit] {
@@ -101,7 +101,7 @@ tfoot {
 div.error {
     border: 1px solid #888;
     padding: 20px;
-    margin: 20;
+    margin: 20px;
     color: red;
     width: 60%;
 }
