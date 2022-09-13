@@ -14,6 +14,8 @@ public class Routes {
     public static final String PAYMENT_REQUEST_FORM = "/payment-request";
     public static final String SEND_PAYMENT_REQUEST = "/payment-request.action";
 
+    public static final String NEW_EXPENSE = "/new-expense";
+
     public static void configure(WeShareServer server) {
         server.routes(() -> {
             post(LOGIN_ACTION,          PersonController.login);
@@ -21,6 +23,7 @@ public class Routes {
             get(EXPENSES,               ExpensesController.view);
             get(PAYMENT_REQUEST_FORM,   PaymentRequestController.form);
             post(SEND_PAYMENT_REQUEST,  PaymentRequestController.send);
+            get(NEW_EXPENSE,            NewExpensesController.view);
         });
     }
 }
