@@ -1,0 +1,107 @@
+<!DOCTYPE HTML>
+<html
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{/layout.html}">
+<head></head>
+<body>
+<div layout:fragment="contents">
+  <section class="new-expense-form">
+    <form method="post" action="/expenses.action" enctype="application/x-www-form-urlencoded">
+    <label for="description">Description
+      <input type="text" id="description" name="description" th:value="*{description}" required/>
+    </label>
+
+
+    <label for="date">Date (dd/mm/yyyy e.g. 21/10/2021)
+      <input type="date" id="date" name="date" th:value ="*{date}" required/>
+    </label>
+
+
+    <label for="amount">Amount (no cents allowed)
+      <input type=number id="amount" name="amount" th:max="${max_amount}" required/>
+    </label>
+
+    <a href="templates/expenses.html"><button type="submit" class="button" name="submit" value="Submit">Submit</button></a>
+
+  </form></section>
+
+  <!-- Script for better currency formatting -->
+  <script>
+            const currencyInput = document.querySelectorAll('input[type="currency"]');
+            const currency = 'ZAR';
+            const options = {
+                maximumFractionDigits: 2,
+                currency: currency,
+                style: "currency",
+                currencyDisplay: "symbol",
+            };
+
+            for (let i = 0; i < currencyInput.length; i++ ) {
+                onBlur({
+                    target: currencyInput[i]
+                })
+
+                currencyInput[i].addEventListener('focus', onFocus)
+                currencyInput[i].addEventListener('blur', onBlur)
+
+                /**
+                 * Takes the maximum between the current value
+                 * and the assigned maximum attribute
+                 * and sets that as the value for the target of e
+                 * @param e the element
+                 */
+                function maximum(e){
+                    if (e.target.hasAttribute("max")){
+                        const max_value = localStringToNumber(e.target.getAttribute("max"));
+                        if (localStringToNumber( e.target.value ) > max_value){
+                            e.target.value = max_value;
+                        }
+                    }
+                }
+
+                /**
+                 * Formats the input value to have currency formatting, with two decimals
+                 * controlled by the options variable
+                 * @param e the element
+                 */
+                function format(e) {
+                    const value = e.target.value;
+
+                    e.target.value = ( value || localStringToNumber(value) === 0 ) ?
+                        localStringToNumber( value ).toLocaleString( undefined, options ) :
+                        ''
+                }
+                /**
+                 * String to number, Strips all characters, excluding '.' and numbers
+                 * @param s string to be converted
+                 * @returns {number} a number derived from that string
+                 */
+                function localStringToNumber( s ) {
+                    return Number( String( s ).replace( /[^0-9.-]+/g, "" ) )
+                }
+
+                /**
+                 * What gets done when you focus on the input
+                 * Makes the value into a raw number, removing all formatting
+                 * @param e the element
+                 */
+                function onFocus( e ) {
+                    const value = e.target.value;
+                    e.target.value = value ? localStringToNumber( value ) : ''
+                }
+
+                /**
+                 * What gets done when you click away from the input
+                 * Formats the value in the input.
+                 * @param e the element
+                 */
+                function onBlur( e ) {
+                    maximum(e);
+                    format(e);
+                }
+            }
+        </script>
+</div>
+</body>
+</html>
