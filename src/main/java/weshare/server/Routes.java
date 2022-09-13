@@ -11,7 +11,7 @@ public class Routes {
     public static final String LOGOUT = "/logout";
     public static final String EXPENSES = "/expenses";
 
-    public static final String PAYMENT_REQUEST_FORM = "/payment-request/{Expense_ID}";
+    public static final String PAYMENT_REQUEST_FORM = "/payment-request";
     public static final String SEND_PAYMENT_REQUEST = "/payment-request.action";
 
     public static void configure(WeShareServer server) {

@@ -21,7 +21,13 @@ public class PaymentRequestController {
     public static final Handler form = context -> {
         ExpenseDAO expensesDAO = ServiceRegistry.lookup(ExpenseDAO.class);
         Person personLoggedIn = WeShareServer.getPersonLoggedIn(context);
-        UUID id = UUID.fromString(context.pathParam("Expense_ID"));
+        String idString = context.queryParam("id");
+
+        if (idString == null){
+            throw new WeShareException("Please add ?id=<UUID> to this URL");
+        }
+
+        UUID id = UUID.fromString(idString);
         Optional<Expense> expense = expensesDAO.get(id);
 
         if (expense.isPresent()){
@@ -34,9 +40,8 @@ public class PaymentRequestController {
                     put("max_amount", e.totalAmountAvailableForPaymentRequests());
                     put("expense_UUID", e.getId());
                     put("requests", e.listOfPaymentRequests());
+                    put("total", e.totalAmountOfPaymentsRequested());
                 }};
-
-                System.out.println(viewModel);
 
                 context.render("payment-request-form.html", viewModel);
                 return;
@@ -90,7 +95,7 @@ public class PaymentRequestController {
             );
         }
 
-        context.redirect("/payment-request/"+ uuid);
+        context.redirect("/payment-request?id="+ uuid);
     };
 
 
