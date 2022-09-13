@@ -30,14 +30,14 @@
             <tr class="table-header-requests">
                 <td><u>Who</u></td>
                 <td><u>Due</u></td>
-                <td><u>Paid</u></td>
+                <td><u>Paid?</u></td>
                 <td><u>Amount</u></td>
             </tr>
             <th:block th:each="request: ${requests}">
                 <tr>
                     <td><span id="name" th:text="${request.personWhoShouldPayBack.email}">bob</span></td>
                     <td><span th:text="${request.dueDate}">05/09/2022</span></td>
-                    <td><span th:text="${request.isPaid}">No</span></td>
+                    <td><span id="paid" th:text="${request.isPaid}">No</span></td>
                     <td><span th:text="${request.amountToPay}">ZAR 120</span></td>
                 </tr>
             </th:block>
@@ -80,11 +80,26 @@
 
         <input id="submit" type="submit" value="Submit"/>
     </form>
+
+    <!-- Script to format if they have Paid or not -->
     <script>
-        const currencyInput = document.querySelectorAll('span[id="name"]');
-        for (let i = 0; i < currencyInput.length; i++ ) {
-            let s = currencyInput.item(i).textContent;
-            currencyInput.item(i).textContent = s.substring(0, s.indexOf("@"))
+        const hasPaid = document.querySelectorAll('span[id="paid"]');
+        for (let i = 0; i < hasPaid.length; i++ ) {
+            let s = hasPaid.item(i).textContent;
+            if (s === "false"){
+                hasPaid.item(i).textContent = "No";
+            } else {
+                hasPaid.item(i).textContent = "Yes";
+            }
+        }
+    </script>
+
+    <!-- Script to format name of indebted  -->
+    <script>
+        const names = document.querySelectorAll('span[id="name"]');
+        for (let i = 0; i < names.length; i++ ) {
+            let s = names.item(i).textContent;
+            names.item(i).textContent = s.substring(0, s.indexOf("@"))
         }
     </script>
 
