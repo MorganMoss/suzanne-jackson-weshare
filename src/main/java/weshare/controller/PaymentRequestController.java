@@ -1,12 +1,14 @@
 package weshare.controller;
 
 import io.javalin.http.Handler;
+import org.jetbrains.annotations.NotNull;
 import weshare.model.*;
 import weshare.persistence.ExpenseDAO;
 import weshare.persistence.PersonDAO;
 import weshare.server.ServiceRegistry;
 import weshare.server.WeShareServer;
 
+import javax.money.MonetaryAmount;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -29,17 +31,42 @@ public class PaymentRequestController {
                     put("expense_date", e.getDate());
                     put("expense_description", e.getDescription());
                     put("expense_amount", e.getAmount());
+                    put("max_amount", e.totalAmountAvailableForPaymentRequests());
                     put("expense_UUID", e.getId());
+                    put("requests", e.listOfPaymentRequests());
                 }};
+
+                System.out.println(viewModel);
+
                 context.render("payment-request-form.html", viewModel);
                 return;
             }
-
             throw new WeShareException("User is not the owner of this expense! The owner is " + e.getPerson().getEmail());
         }
-
         throw new WeShareException("No Expense under that UUID found!");
     };
+
+    /**
+     * Takes a messy string
+     * @param s messy string
+     * @return the amount as a long
+     */
+    @NotNull
+    private static MonetaryAmount complexStringToMoney(String s){
+        float f = Float.parseFloat(s.replaceAll("[^\\d.]", ""));
+        return MoneyHelper.amountOf(Math.round(f));
+    }
+
+
+    /**
+     * quick date to string
+     * @param s date as a string
+     * @return the date
+     */
+    @NotNull
+    private static LocalDate stringToDate(String s){
+        return LocalDate.parse(s);
+    }
 
     /**
      * This handler will submit the data from the form
@@ -49,36 +76,21 @@ public class PaymentRequestController {
         ExpenseDAO expensesDAO = ServiceRegistry.lookup(ExpenseDAO.class);
         PersonDAO personDAO = ServiceRegistry.lookup(PersonDAO.class);
 
-        System.out.println(context.formParamMap());
+        UUID uuid = UUID.fromString(Objects.requireNonNull(context.formParam("expense_UUID")));
 
-        Optional<Expense> expense = expensesDAO.get(
-            UUID.fromString(
-                Objects.requireNonNull(
-                        context.formParam("expense_UUID")
-            )));
+        Optional<Expense> expense = expensesDAO.get(uuid);
 
         Optional<Person> person = personDAO.findPersonByEmail(context.formParam("email"));
 
         if (expense.isPresent() && person.isPresent()){
-            PaymentRequest paymentRequest = new PaymentRequest(
-                    expense.get(),
+            PaymentRequest paymentRequest = expense.get().requestPayment(
                     person.get(),
-                    MoneyHelper.amountOf(
-                            Math.round(Float.parseFloat(
-                                    Objects.requireNonNull(
-                                            context.formParam("amount")
-                                    ).replaceAll("[^\\d.]", "")
-                            ))
-                    ),
-                    LocalDate.parse(
-                            Objects.requireNonNull(
-                                    context.formParam("due-date")
-                            )
-                    )
+                    complexStringToMoney(Objects.requireNonNull(context.formParam("amount"))),
+                    stringToDate(context.formParam("due-date"))
             );
-
-            System.out.println(paymentRequest);
         }
+
+        context.redirect("/payment-request/"+ uuid);
     };
 
 

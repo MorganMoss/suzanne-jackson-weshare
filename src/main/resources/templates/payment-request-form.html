@@ -8,6 +8,16 @@
     <div layout:fragment="contents">
         <h1>Submit a Payment Request for the Following Expense</h1>
 
+        <div id="previous_requests" th:unless="${#lists.isEmpty(requests)}">
+            <p> Previous Payment Requests for this Expense </p>
+            <th:block th:each="request: ${requests}">
+                <p>Who: <span th:text="${request.personWhoShouldPayBack.email}">bob</span></p>
+                <p>Due: <span th:text="${request.dueDate}">05/09/2022</span></p>
+                <p>Paid: <span th:text="${request.isPaid}">No</span></p>
+                <p>Amount: <span th:text="${request.amountToPay}">ZAR 120</span></p>
+            </th:block>
+        </div>
+
         <table>
             <tr>
                 <td> Date </td>
@@ -35,10 +45,10 @@
             <br>
 
             <label for="amount">The amount they should pay (Maximum
-                <span th:text="${expense_amount}" th:remove="tag"> </span>
+                <span th:text="${max_amount}" th:remove="tag"> </span>
                 )
                 <br>
-                <input type="currency" id="amount" name="amount" th:max="${expense_amount}" required>
+                <input type="currency" id="amount" name="amount" th:max="${max_amount}" required>
                 <br>
             </label>
             <br>
