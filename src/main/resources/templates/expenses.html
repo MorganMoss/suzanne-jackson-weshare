@@ -11,6 +11,13 @@
         <a href="/new-expense">Add a new expense</a>
         <p id="no_expenses" th:if="${#lists.isEmpty(expenses)}">You don't have any expenses!</p>
 
+        <div id="expenses" th:unless="${#lists.isEmpty(expenses)}">
+            <th:block th:each="expense: ${expenses}">
+                <p>Date: <span th:text="${expense.date}">05/09/2022</span></p>
+                <p>Description: <span th:text="${expense.description}">Lunch</span></p>
+                <p>Amount: <span th:text="${expense.amount}">ZAR 120</span></p>
+            </th:block>
+        </div>
     </section>
 </div>
 </body>
