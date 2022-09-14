@@ -28,29 +28,29 @@ public class PaymentRequestSentController {
         Person personLoggedIn = WeShareServer.getPersonLoggedIn(context);
 
         Collection<Expense> expenses = expensesDAO.findExpensesForPerson(personLoggedIn);
-        Collection<MonetaryAmount> netExpenseTotal = netExpensesList(expenses);
-        MonetaryAmount netExpensesTotal = netExpensesTotal(netExpenseTotal);
+        Collection<PaymentRequest> requestsSent = new ArrayList<>();
+
+        for(Expense expense: expenses) {
+            for(PaymentRequest request: expense.listOfPaymentRequests()) {
+                request.getPersonWhoShouldPayBack().getName();
+                request.getDescription();
+                request.daysLeftToPay();
+                request.getAmountToPay();
+                requestsSent.add(request);
+            }
+        }
 
         Map<String, Object> viewModel = new HashMap<>();
-        viewModel.put("expenses", expenses);
-        viewModel.put("netExpensesTotal", netExpensesTotal);
+        viewModel.put("requestsSent", requestsSent);
 
         context.render("payment-request-sent.html", viewModel);
     };
 
-    private static Collection<MonetaryAmount> netExpensesList(Collection<Expense> expenses) {
-        Collection<MonetaryAmount> netExpenses = new ArrayList<>();
+    public static MonetaryAmount requestsSentTotalAmount(Collection<MonetaryAmount> requestsSentAmountList) {
+        int requestSentInt = amountOf(0).getNumber().intValue();
 
-        for(Expense expense: expenses) netExpenses.add(expense.amountLessPaymentsReceived());
+        for(MonetaryAmount requestSentAmount: requestsSentAmountList) requestSentInt += requestSentAmount.getNumber().intValue();
 
-        return netExpenses;
-    }
-
-    public static MonetaryAmount netExpensesTotal(Collection<MonetaryAmount> netExpensesList) {
-        int netExpenseInt = amountOf(0).getNumber().intValue();
-
-        for(MonetaryAmount netExpense: netExpensesList) netExpenseInt += netExpense.getNumber().intValue();
-
-        return amountOf(netExpenseInt);
+        return amountOf(requestSentInt);
     }
 }

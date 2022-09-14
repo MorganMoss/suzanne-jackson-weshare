@@ -8,34 +8,28 @@
 <div layout:fragment="contents">
     <section class="expenseList">
         <h2>People that owe me</h2>
-        <p id="no_expenses" th:if="${#lists.isEmpty(expenses)}">Nobody owes you anything!</p>
+        <p id="no_expenses" th:if="${#lists.isEmpty(requestsSent)}">Nobody owes you anything!</p>
 
-        <table class="table" th:unless="${#lists.isEmpty(expenses)}">
+        <table class="table" th:unless="${#lists.isEmpty(requestsSent)}">
             <thead>
             <tr>
-                <th>When</th>
+                <th>Who</th>
                 <th>What</th>
-                <th>Amount Spent</th>
-                <th>Payments Requests</th>
-                <th>Payments Received</th>
-                <th>Net Expenses</th>
+                <th>Due In (days)</th>
+                <th>How Much</th>
             </tr>
             </thead>
             <tbody>
-            <tr th:block th:each="expense: ${expenses}">
-                <td th:text="${expense.date}" data-label="When">2022-09-05</td>
-                <td th:text="${expense.description}" data-label="What"><a href="#">Airtime</a></td>
-                <td th:text="${expense.amount}" data-label="Amount Spent">ZAR 100.00</td>
-                <td th:text="${expense.totalAmountOfPaymentsRequested()}" data-label="Payments Requests">ZAR 0.00</td>
-                <td th:text="${expense.totalAmountForPaymentsReceived()}" data-label="Payments Received">ZAR 0.00</td>
-                <td th:text="${expense.amountLessPaymentsReceived()}" data-label="Net Expenses">ZAR 100.00</td>
+            <tr th:block th:each="request: ${requestsSent}">
+                <td th:text="${request.getPersonWhoShouldPayBack().getName()}" data-label="Who">Kagiso</td>
+                <td th:text="${request.getDescription()}" data-label="What"><a href="#">Airtime</a></td>
+                <td th:text="${request.daysLeftToPay()}" data-label="Due In (days)">1</td>
+                <td th:text="${request.getAmountToPay()}" data-label="How Much">ZAR 100.00</td>
             </tr>
             </tbody>
             <tfoot>
             <tr>
-                <td>Total Expenses</td>
-                <td></td>
-                <td></td>
+                <td>Total Unpaid</td>
                 <td></td>
                 <td></td>
                 <td th:text="${netExpensesTotal}">ZAR 100.00</td>
