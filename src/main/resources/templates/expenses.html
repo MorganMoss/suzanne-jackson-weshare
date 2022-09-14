@@ -4,6 +4,84 @@
         xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
         layout:decorate="~{/layout.html}">
 <head></head>
+<style>
+
+table {
+    border-collapse: collapse;
+    width: 80%;
+    margin: auto;
+    font-size: 0.9rem;
+    overflow: hidden;
+}
+
+table th {
+    text-decoration: underline;
+}
+
+table th, table td {
+    padding: 10px;
+    text-align: center;
+}
+
+table tfoot {
+    border-top: 2px solid gray;
+    font-weight: 600;
+}
+
+@media (max-width: 600px) {
+
+    table {
+        width: 80%;
+    }
+
+    table thead {
+        display: none;
+    }
+
+    table, table tbody, table tr, table td {
+        display: block;
+    }
+
+    table tbody tr {
+        border: 1px solid #adadad;
+        margin-bottom: 1rem;
+    }
+
+    table tbody tr:last-child {
+        margin-bottom: 2rem;
+    }
+
+    table tbody tr td {
+        text-align: right;
+    }
+
+    table td::before {
+        content: attr(data-label);
+        position: absolute;
+        left: 12.5vw;
+        font-weight: 600;
+    }
+
+    table tfoot, table tfoot tr, table tfoot tr td {
+        display: flex;
+    }
+
+    table tfoot tr {
+        width: 100%;
+    }
+
+    table tfoot tr td:first-child {
+        width: 50%;
+    }
+
+    table tfoot tr td:last-child {
+        text-align: right;
+        position: absolute;
+        right: 9vw;
+    }
+}
+
+</style>
 <body>
 <div layout:fragment="contents">
     <section class="expenseList">
@@ -11,13 +89,38 @@
         <a href="/new-expense">Add a new expense</a>
         <p id="no_expenses" th:if="${#lists.isEmpty(expenses)}">You don't have any expenses!</p>
 
-        <div id="expenses" th:unless="${#lists.isEmpty(expenses)}">
-            <th:block th:each="expense: ${expenses}">
-                <p>Date: <span th:text="${expense.date}">05/09/2022</span></p>
-                <p>Description: <span th:text="${expense.description}">Lunch</span></p>
-                <p>Amount: <span th:text="${expense.amount}">ZAR 120</span></p>
-            </th:block>
-        </div>
+        <table id="expenses_table" th:unless="${#lists.isEmpty(expenses)}">
+            <thead>
+            <tr>
+                <th>When</th>
+                <th>What</th>
+                <th>Amount Spent</th>
+                <th>Payments Requests</th>
+                <th>Payments Received</th>
+                <th>Net Expenses</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:block th:each="expense: ${expenses}">
+                <td th:text="${expense.date}" data-label="When">2022-09-05</td>
+                <td th:text="${expense.description}" data-label="What"><a href="#">Airtime</a></td>
+                <td th:text="${expense.amount}" data-label="Amount Spent">ZAR 100.00</td>
+                <td th:text="${expense.totalAmountOfPaymentsRequested()}" data-label="Payments Requests">ZAR 0.00</td>
+                <td th:text="${expense.totalAmountForPaymentsReceived()}" data-label="Payments Received">ZAR 0.00</td>
+                <td th:text="${expense.amountLessPaymentsReceived()}" data-label="Net Expenses">ZAR 100.00</td>
+            </tr>
+            </tbody>
+            <tfoot>
+            <tr>
+                <td>Total Expenses</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td th:text="${netExpensesTotal}">ZAR 100.00</td>
+            </tr>
+            </tfoot>
+        </table>
     </section>
 </div>
 </body>
