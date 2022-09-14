@@ -7,24 +7,31 @@
 <body>
 <div layout:fragment="contents">
   <section class="new-expense-form">
-    <form method="post" action="/expenses.action" enctype="application/x-www-form-urlencoded">
+    <form method="post" action="/new-expense.action" enctype="application/x-www-form-urlencoded">
     <label for="description">Description
-      <input type="text" id="description" name="description" th:value="*{description}" required/>
+      <input type="text" id="description" name="description" th:field="*{description}" required/>
     </label>
 
+      <br>
 
     <label for="date">Date (dd/mm/yyyy e.g. 21/10/2021)
-      <input type="date" id="date" name="date" th:value ="*{date}" required/>
+      <input type="date" id="date" name="date" th:field="*{date}" required/>
     </label>
 
+      <br>
 
     <label for="amount">Amount (no cents allowed)
-      <input type=number id="amount" name="amount" th:max="${max_amount}" required/>
+      <input type=number id="amount" name="amount" th:field="*{amount}" th:max="${max_amount}" required/>
     </label>
 
-    <a href="templates/expenses.html"><button type="submit" class="button" name="submit" value="Submit">Submit</button></a>
+      <br>
 
-  </form></section>
+    <a href="/expenses">
+      <input id="submit" type="submit" th:value="Submit">
+    </a>
+
+  </form>
+  </section>
 
   <!-- Script for better currency formatting -->
   <script>

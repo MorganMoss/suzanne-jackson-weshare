@@ -16,6 +16,8 @@ public class Routes {
 
     public static final String NEW_EXPENSE = "/new-expense";
 
+    public static final String SAVE_EXPENSE = "/new-expense.action";
+
     public static void configure(WeShareServer server) {
         server.routes(() -> {
             post(LOGIN_ACTION,          PersonController.login);
@@ -24,6 +26,7 @@ public class Routes {
             get(PAYMENT_REQUEST_FORM,   PaymentRequestController.form);
             post(SEND_PAYMENT_REQUEST,  PaymentRequestController.send);
             get(NEW_EXPENSE,            NewExpensesController.view);
+            post(SAVE_EXPENSE,          NewExpensesController.saveExpense);
         });
     }
 }
