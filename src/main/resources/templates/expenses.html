@@ -11,7 +11,7 @@
         <a href="/new-expense">Add a new expense</a>
         <p id="no_expenses" th:if="${#lists.isEmpty(expenses)}">You don't have any expenses!</p>
 
-        <table id="table" th:unless="${#lists.isEmpty(expenses)}">
+        <table class="table" th:unless="${#lists.isEmpty(expenses)}">
             <thead>
             <tr>
                 <th>When</th>
