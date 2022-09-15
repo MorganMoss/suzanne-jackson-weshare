@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{/layout.html}">
+<head></head>
+<body>
+    <div layout:fragment="contents">
+        <section class="payment_request_received">
+            <h2>People that you owe</h2>
+            <p id="payment_request" th:if="${#lists.isEmpty(requests)}">You don't owe anyone anything!</p>
+
+            <table class="table" th:unless="${#lists.isEmpty(requests)}">
+                <thead>
+                <tr>
+                    <th>Who</th>
+                    <th>What</th>
+                    <th>Due In (days)</th>
+                    <th>How Much</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:block th:each="request: ${requests}">
+                    <td th:text="${request.personWhoShouldPayBack.getName()}" data-label="Who">student1</td>
+                    <td th:text="${request.description}" data-label="What"><a href="#">Dinner</a></td>
+                    <td th:text="${request.daysLeftToPay}" data-label="When">4</td>
+                    <td th:text="${request.getAmountToPay}" data-label="Payments Requests">ZAR 150</td>
+                </tr>
+                </tbody>
+                <tfoot>
+                <tr>
+                    <td>Total Expenses</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td th:text="${netExpensesTotal}">ZAR 100.00</td>
+                </tr>
+                </tfoot>
+            </table>
+        </section>
+    </div>
+</body>
+
+</html>

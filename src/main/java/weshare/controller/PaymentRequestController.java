@@ -103,6 +103,11 @@ public class PaymentRequestController {
     };
 
     public static final Handler received = context -> {
+        ExpenseDAO expensesDAO = ServiceRegistry.lookup(ExpenseDAO.class);
+        Person personLoggedIn = WeShareServer.getPersonLoggedIn(context);
+        Collection<PaymentRequest> paymentRequests = expensesDAO.findPaymentRequestsReceived(personLoggedIn);
+        Map<String, Object> modelView = Map.of("requests", paymentRequests);
+        context.render("paymentrequests_received.html", modelView);
     };
 
     public static final Handler pay = context -> {
