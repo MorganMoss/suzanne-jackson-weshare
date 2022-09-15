@@ -5,6 +5,7 @@ import org.jetbrains.annotations.NotNull;
 import weshare.model.*;
 import weshare.persistence.ExpenseDAO;
 import weshare.persistence.PersonDAO;
+import weshare.server.Routes;
 import weshare.server.ServiceRegistry;
 import weshare.server.WeShareServer;
 
@@ -103,16 +104,32 @@ public class PaymentRequestController {
         Collection<PaymentRequest> paymentRequests = expensesDAO.findPaymentRequestsReceived(personLoggedIn);
         Map<String, Object> modelView = new HashMap<>(Map.of("requests", paymentRequests));
 
+        modelView.put("total", MoneyHelper.ZERO_RANDS);
+
         paymentRequests.stream()
             .filter(paymentRequest -> !paymentRequest.isPaid())
             .map(PaymentRequest::getAmountToPay)
             .reduce(MonetaryAmount::add)
             .ifPresent(monetaryAmount -> modelView.put("total", monetaryAmount));
 
-
         context.render("paymentrequests_received.html", modelView);
     };
 
     public static final Handler pay = context -> {
+
+        ExpenseDAO expensesDAO = ServiceRegistry.lookup(ExpenseDAO.class);
+        Person personLoggedIn = WeShareServer.getPersonLoggedIn(context);
+        UUID requestID = UUID.fromString(context.formParam("request_id"));
+        UUID expenseID = UUID.fromString(context.formParam("expense_id"));
+
+        Optional<Expense> expense = expensesDAO.get(expenseID);
+
+        if (expense.isPresent()) {
+            Expense e = expense.get();
+            Payment payment = e.payPaymentRequest(requestID, personLoggedIn, DateHelper.TODAY);
+            expensesDAO.save(payment.getExpenseForPersonPaying());
+        }
+
+        context.redirect(Routes.PAYMENT_REQUEST_RECEIVED);
     };
 }
