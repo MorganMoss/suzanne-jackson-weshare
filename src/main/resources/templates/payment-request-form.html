@@ -26,7 +26,7 @@
 
     <div id="previous_requests" th:unless="${#lists.isEmpty(requests)}">
         <h2> Previous Payment Requests for this Expense </h2>
-        <table>
+        <table class="table">
             <thead>
                 <tr class="table-header-requests">
                     <td><u>Who</u></td>
@@ -38,17 +38,21 @@
             <tbody>
                 <tr th:block th:each="request: ${requests}">
                     <td th:id="'paymentrequest_who_'+${request.id}"
-                        th:text="${request.personWhoShouldPayBack.getName()}"/>
+                        th:text="${request.personWhoShouldPayBack.getName()}"
+                        data-label="Who"/>
                     <td th:id="'paymentrequest_date_'+${request.id}"
-                        th:text="${request.dueDate}"/>
-                    <td th:id="'paymentrequest_paid_'+${request.id}">
+                        th:text="${request.dueDate}"
+                        data-label="Due"/>
+                    <td th:id="'paymentrequest_paid_'+${request.id}"
+                        data-label="Paid?">
                         <span th:if="${request.isPaid}"
                               th:text="Yes"/>
                         <span th:unless="${request.isPaid}"
                               th:text="No"/>
                     </td>
                     <td th:id="'paymentrequest_amount_'+${request.id}"
-                        th:text="${request.amountToPay}"/>
+                        th:text="${request.amountToPay}"
+                        data-label="Amount"/>
                 </tr>
             </tbody>
             <tfoot>
