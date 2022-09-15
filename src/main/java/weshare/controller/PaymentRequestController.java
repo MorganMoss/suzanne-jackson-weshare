@@ -101,7 +101,15 @@ public class PaymentRequestController {
         ExpenseDAO expensesDAO = ServiceRegistry.lookup(ExpenseDAO.class);
         Person personLoggedIn = WeShareServer.getPersonLoggedIn(context);
         Collection<PaymentRequest> paymentRequests = expensesDAO.findPaymentRequestsReceived(personLoggedIn);
-        Map<String, Object> modelView = Map.of("requests", paymentRequests);
+        Map<String, Object> modelView = new HashMap<>(Map.of("requests", paymentRequests));
+
+        paymentRequests.stream()
+            .filter(paymentRequest -> !paymentRequest.isPaid())
+            .map(PaymentRequest::getAmountToPay)
+            .reduce(MonetaryAmount::add)
+            .ifPresent(monetaryAmount -> modelView.put("total", monetaryAmount));
+
+
         context.render("paymentrequests_received.html", modelView);
     };
 
