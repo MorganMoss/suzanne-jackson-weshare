@@ -94,7 +94,9 @@ public class PaymentRequestController {
         context.redirect("/payment-request?id="+ uuid);
     };
 
-
+    /**
+     * Shows a page of all payment requests the current user has received
+     */
     public static final Handler sent = context -> {
         ExpenseDAO expensesDAO = ServiceRegistry.lookup(ExpenseDAO.class);
         Person personLoggedIn = WeShareServer.getPersonLoggedIn(context);
