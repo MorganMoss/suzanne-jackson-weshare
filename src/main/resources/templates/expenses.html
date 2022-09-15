@@ -9,7 +9,10 @@
     <section class="expenseList">
         <h2>My Expenses</h2>
         <a href="/new-expense">Add a new expense</a>
-        <p id="no_expenses" th:if="${#lists.isEmpty(expenses)}">You don't have any expenses!</p>
+        <p id="no_expenses"
+           th:if="${#lists.isEmpty(expenses)}">
+            You don't have any expenses!
+        </p>
 
         <table class="table" th:unless="${#lists.isEmpty(expenses)}">
             <thead>
@@ -23,24 +26,44 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:block th:each="expense: ${expenses}">
-                <td th:text="${expense.date}" data-label="When">2022-09-05</td>
-                <td data-label="What"><a th:text="${expense.description}" th:href="'/payment-request?id='+${expense.id}">Airtime</a></td>
-                <td th:text="${expense.amount}" data-label="Amount Spent">ZAR 100.00</td>
-                <td th:text="${expense.totalAmountOfPaymentsRequested()}" data-label="Payments Requests">ZAR 0.00</td>
-                <td th:text="${expense.totalAmountForPaymentsReceived()}" data-label="Payments Received">ZAR 0.00</td>
-                <td th:text="${expense.amountLessPaymentsReceived()}" data-label="Net Expenses">ZAR 100.00</td>
-            </tr>
+                <tr th:block th:each="expense: ${expenses}">
+                    <td th:id="'date_'+${expense.id}"
+                        th:text="${expense.date}"
+                        data-label="When"/>
+
+                    <td th:id="'payment_request_'+${expense.id}"
+                        data-label="What">
+                        <a  th:text="${expense.description}"
+                            th:href="'/payment-request?id='+${expense.id}"/>
+                    </td>
+
+                    <td th:id="'amount_'+${expense.id}"
+                        th:text="${expense.amount}"
+                        data-label="Amount Spent"/>
+
+                    <td th:id="'request_'+${expense.id}"
+                        th:text="${expense.totalAmountOfPaymentsRequested()}"
+                        data-label="Payments Requests"/>
+
+                    <td th:id="'received_'+${expense.id}"
+                        th:text="${expense.totalAmountForPaymentsReceived()}"
+                        data-label="Payments Received"/>
+
+                    <td th:id="'nett_'+${expense.id}"
+                        th:text="${expense.amountLessPaymentsReceived()}"
+                        data-label="Net Expenses"/>
+                </tr>
             </tbody>
             <tfoot>
-            <tr>
-                <td>Total Expenses</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td th:text="${netExpensesTotal}">ZAR 100.00</td>
-            </tr>
+                <tr>
+                    <td>Total Expenses</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td id="grand_total"
+                        th:text="${netExpensesTotal}"/>
+                </tr>
             </tfoot>
         </table>
     </section>
