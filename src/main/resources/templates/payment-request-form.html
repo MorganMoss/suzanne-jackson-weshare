@@ -37,17 +37,17 @@
             </thead>
             <tbody>
                 <tr th:block th:each="request: ${requests}">
-                    <td id="'paymentrequest_who_'+${request.id}"
+                    <td th:id="'paymentrequest_who_'+${request.id}"
                         th:text="${request.personWhoShouldPayBack.getName()}"/>
-                    <td id="'paymentrequest_date_'+${request.id}"
+                    <td th:id="'paymentrequest_date_'+${request.id}"
                         th:text="${request.dueDate}"/>
-                    <td id="'paymentrequest_paid_'+${request.id}">
+                    <td th:id="'paymentrequest_paid_'+${request.id}">
                         <span th:if="${request.isPaid}"
                               th:text="Yes"/>
                         <span th:unless="${request.isPaid}"
                               th:text="No"/>
                     </td>
-                    <td id="'paymentrequest_amount_'+${request.id}"
+                    <td th:id="'paymentrequest_amount_'+${request.id}"
                         th:text="${request.amountToPay}"/>
                 </tr>
             </tbody>
@@ -82,7 +82,7 @@
 
         <label for="amount">By when must this claim be settled (dd/mm/yyyy)
             <br>
-            <input type="date" id="due-date" name="due-date" required>
+            <input type="date" id="due_date" name="due-date" required>
             <br>
         </label>
         <br>
