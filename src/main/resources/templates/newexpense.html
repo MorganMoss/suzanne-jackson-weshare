@@ -6,8 +6,8 @@
 <head></head>
 <body>
 <div layout:fragment="contents">
-  <section class="new-expense-form">
-    <form method="post" action="/new-expense.action" enctype="application/x-www-form-urlencoded">
+  <section class="newexpense">
+    <form method="post" action="/newexpense.action" enctype="application/x-www-form-urlencoded">
     <label for="description">Description
       <input type="text" id="description" name="description" th:field="*{description}" required/>
     </label>

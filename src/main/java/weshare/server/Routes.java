@@ -15,9 +15,9 @@ public class Routes {
     public static final String PAYMENT_REQUEST_FORM = "/payment-request";
     public static final String SEND_PAYMENT_REQUEST = "/payment-request.action";
 
-    public static final String NEW_EXPENSE = "/new-expense";
+    public static final String NEW_EXPENSE = "/newexpense";
 
-    public static final String SAVE_EXPENSE = "/new-expense.action";
+    public static final String SAVE_EXPENSE = "/newexpense.action";
 
     public static final String PAYMENT_REQUEST_RECEIVED = "/paymentrequests_received";
 

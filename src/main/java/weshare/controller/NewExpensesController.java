@@ -24,7 +24,7 @@ public class NewExpensesController {
 
         Collection<Expense> expenses = expensesDAO.findExpensesForPerson(personLoggedIn);
         Map<String, Object> viewModel = Map.of("expenses", expenses);
-        context.render("new-expense.html", viewModel);
+        context.render("newexpense.html", viewModel);
     };
 
     /**

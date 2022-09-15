@@ -8,7 +8,7 @@
 <div layout:fragment="contents">
     <section class="expenseList">
         <h2>My Expenses</h2>
-        <a href="/new-expense">Add a new expense</a>
+        <a href="/newexpense" id="add_expense">Add a new expense</a>
         <p id="no_expenses"
            th:if="${#lists.isEmpty(expenses)}">
             You don't have any expenses!
