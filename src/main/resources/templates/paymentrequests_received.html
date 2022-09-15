@@ -25,16 +25,21 @@
                     <td th:text="${request.description}" data-label="What"><a href="#">Dinner</a></td>
                     <td th:text="${request.daysLeftToPay}" data-label="When">4</td>
                     <td th:text="${request.getAmountToPay}" data-label="Payments Requests">ZAR 150</td>
+                    <td data-label="Pay">
+                        <form method="post" action="/paymentrequests_received.action" enctype="application/x-www-form-urlencoded">
+                            <input type="hidden" th:value="${request.id}">
+                            <input type="submit" value="Pay"/>
+                        </form>
+                    </td>
                 </tr>
+
                 </tbody>
                 <tfoot>
                 <tr>
-                    <td>Total Expenses</td>
+                    <td>Total Unpaid</td>
                     <td></td>
                     <td></td>
-                    <td></td>
-                    <td></td>
-                    <td th:text="${netExpensesTotal}">ZAR 100.00</td>
+                    <td th:text="${total}" id="grand_total">ZAR 100.00</td>
                 </tr>
                 </tfoot>
             </table>
