@@ -31,9 +31,9 @@
                         th:text="${expense.date}"
                         data-label="When"/>
 
-                    <td th:id="'payment_request_'+${expense.id}"
-                        data-label="What">
-                        <a  th:text="${expense.description}"
+                    <td data-label="What">
+                        <a  th:id="'payment_request_'+${expense.id}"
+                            th:text="${expense.description}"
                             th:href="'/payment-request?id='+${expense.id}"/>
 
                     <td th:id="'amount_'+${expense.id}"

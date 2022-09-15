@@ -8,7 +8,7 @@
 <div layout:fragment="contents">
     <section class="expenseList">
         <h2>People that owe me</h2>
-        <p id="no_expenses" th:if="${#lists.isEmpty(requestsSent)}">Nobody owes you anything!</p>
+        <p id="no_payment_requests_sent" th:if="${#lists.isEmpty(requestsSent)}">Nobody owes you anything!</p>
 
         <table class="table" th:unless="${#lists.isEmpty(requestsSent)}">
             <thead>
