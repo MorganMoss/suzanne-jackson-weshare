@@ -30,9 +30,9 @@ public class Routes {
             get(EXPENSES,               ExpensesController.view);
             get(PAYMENT_REQUEST_SENT,   PaymentRequestSentController.view);
             get(PAYMENT_REQUEST_FORM,   PaymentRequestController.form);
-            get(NEW_EXPENSE,            NewExpensesController.view);
+            get(NEW_EXPENSE,            ExpensesController.viewNewExpensePage);
             post(SEND_PAYMENT_REQUEST,  PaymentRequestController.send);
-            post(SAVE_EXPENSE,          NewExpensesController.saveExpense);
+            post(SAVE_EXPENSE,          ExpensesController.saveExpense);
             get(PAYMENT_REQUEST_RECEIVED, PaymentRequestController.received);
             post(PAYMENT_REQUEST_PAID,  PaymentRequestController.pay);
         });
