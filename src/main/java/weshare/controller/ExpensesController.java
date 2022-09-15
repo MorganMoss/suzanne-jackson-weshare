@@ -19,6 +19,10 @@ import static weshare.model.MoneyHelper.amountOf;
 
 public class ExpensesController {
 
+    /**
+     * Renders the expenses page
+     * Page returns a list of expenses that a user incurred
+     */
     public static final Handler view = context -> {
         ExpenseDAO expensesDAO = ServiceRegistry.lookup(ExpenseDAO.class);
         Person personLoggedIn = WeShareServer.getPersonLoggedIn(context);
@@ -37,6 +41,10 @@ public class ExpensesController {
         context.render("expenses.html", viewModel);
     };
 
+    /**
+     * @param expenses are a list of expenses that the user has incurred
+     * @return a list of net amount expenses
+     */
     private static Collection<MonetaryAmount> netExpensesList(Collection<Expense> expenses) {
         Collection<MonetaryAmount> netExpenses = new ArrayList<>();
 
@@ -45,6 +53,10 @@ public class ExpensesController {
         return netExpenses;
     }
 
+    /**
+     * @param netExpensesList is a list of net amount expenses
+     * @return a single amount in MonetaryAmount type
+     */
     public static MonetaryAmount netExpensesTotal(Collection<MonetaryAmount> netExpensesList) {
         int netExpenseInt = amountOf(0).getNumber().intValue();
 
