@@ -35,7 +35,6 @@
                         <a  th:id="'payment_request_'+${expense.id}"
                             th:text="${expense.description}"
                             th:href="'/payment-request?id='+${expense.id}"/>
-                    </td>
 
                     <td th:id="'amount_'+${expense.id}"
                         th:text="${expense.amount}"

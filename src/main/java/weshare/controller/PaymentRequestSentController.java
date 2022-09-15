@@ -38,12 +38,4 @@ public class PaymentRequestSentController {
 
         context.render("payment-request-sent.html", viewModel);
     };
-
-    public static MonetaryAmount requestsSentTotalAmount(Collection<MonetaryAmount> requestsSentAmountList) {
-        int requestSentInt = amountOf(0).getNumber().intValue();
-
-        for(MonetaryAmount requestSentAmount: requestsSentAmountList) requestSentInt += requestSentAmount.getNumber().intValue();
-
-        return amountOf(requestSentInt);
-    }
 }
