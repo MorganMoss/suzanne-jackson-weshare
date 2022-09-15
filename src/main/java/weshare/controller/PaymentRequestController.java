@@ -33,15 +33,10 @@ public class PaymentRequestController {
         if (expense.isPresent()){
             Expense e =  expense.get();
             if (e.getPerson().equals(personLoggedIn)){
-                Map<String, Object> viewModel = new HashMap<>() {{
-                    put("expense_date", e.getDate());
-                    put("expense_description", e.getDescription());
-                    put("expense_amount", e.getAmount());
-                    put("max_amount", e.totalAmountAvailableForPaymentRequests());
-                    put("expense_UUID", e.getId());
-                    put("requests", e.listOfPaymentRequests());
-                    put("total", e.totalAmountOfPaymentsRequested());
-                }};
+                Map<String, Object> viewModel = new HashMap<>();
+
+                viewModel.put("expense", e);
+                viewModel.put("requests", e.listOfPaymentRequests());
 
                 context.render("payment-request-form.html", viewModel);
                 return;
