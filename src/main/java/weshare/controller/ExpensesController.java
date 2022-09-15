@@ -27,7 +27,6 @@ public class ExpensesController {
         expenses = expenses.stream()
                 .filter(expense -> !expense.isFullyPaidByOthers())
                 .collect(Collectors.toUnmodifiableList());
-        System.out.println(expenses);
         Collection<MonetaryAmount> netExpenseTotal = netExpensesList(expenses);
         MonetaryAmount netExpensesTotal = netExpensesTotal(netExpenseTotal);
 

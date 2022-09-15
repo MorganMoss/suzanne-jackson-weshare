@@ -112,6 +112,10 @@ public class PaymentRequestController {
         context.render("payment-request-sent.html", viewModel);
     };
 
+    /**
+     * This handler will retrieve a list of people you owe,
+     * how much you owe them and when are you expected to pay them.
+     */
     public static final Handler received = context -> {
         ExpenseDAO expensesDAO = ServiceRegistry.lookup(ExpenseDAO.class);
         Person personLoggedIn = WeShareServer.getPersonLoggedIn(context);
@@ -129,6 +133,9 @@ public class PaymentRequestController {
         context.render("paymentrequests_received.html", modelView);
     };
 
+    /**
+     * This handler will process the payment
+     */
     public static final Handler pay = context -> {
 
         ExpenseDAO expensesDAO = ServiceRegistry.lookup(ExpenseDAO.class);
