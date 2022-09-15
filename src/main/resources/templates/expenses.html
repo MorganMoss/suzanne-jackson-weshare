@@ -25,7 +25,7 @@
             <tbody>
             <tr th:block th:each="expense: ${expenses}">
                 <td th:text="${expense.date}" data-label="When">2022-09-05</td>
-                <td th:text="${expense.description}" data-label="What"><a href="#">Airtime</a></td>
+                <td data-label="What"><a th:text="${expense.description}" th:href="'/payment-request?id='+${expense.id}">Airtime</a></td>
                 <td th:text="${expense.amount}" data-label="Amount Spent">ZAR 100.00</td>
                 <td th:text="${expense.totalAmountOfPaymentsRequested()}" data-label="Payments Requests">ZAR 0.00</td>
                 <td th:text="${expense.totalAmountForPaymentsReceived()}" data-label="Payments Received">ZAR 0.00</td>

@@ -11,15 +11,15 @@
     <table>
         <tr>
             <td> Date </td>
-            <td id="expense_date" > <span th:text="${expense_date}" th:remove="tag"> </span> </td>
+            <td id="expense_date" > <span th:text="${expense.date}" th:remove="tag"> </span> </td>
         </tr>
         <tr>
             <td> Description </td>
-            <td id="expense_description"> <span th:text="${expense_description}" th:remove="tag"> </span> </td>
+            <td id="expense_description"> <span th:text="${expense.description}" th:remove="tag"> </span> </td>
         </tr>
         <tr>
             <td> Amount </td>
-            <td id="expense_amount"> <span th:text="${expense_amount}" th:remove="tag"> </span> </td>
+            <td id="expense_amount"> <span th:text="${expense.amount}" th:remove="tag"> </span> </td>
         </tr>
     </table>
     <br>
@@ -35,7 +35,7 @@
             </tr>
             <th:block th:each="request: ${requests}">
                 <tr>
-                    <td><span id="name" th:text="${request.personWhoShouldPayBack.email}">bob</span></td>
+                    <td><span id="name" th:text="${request.personWhoShouldPayBack.getName()}">bob</span></td>
                     <td><span th:text="${request.dueDate}">05/09/2022</span></td>
                     <td><span id="paid" th:text="${request.isPaid}">No</span></td>
                     <td><span th:text="${request.amountToPay}">ZAR 120</span></td>
@@ -46,7 +46,7 @@
         <table>
             <tr>
                 <td><span><b>Total Amount of Payments Requested</b></span></td>
-                <td><b><span th:text="${total}">ZAR 150.00</span></b></td>
+                <td><b><span th:text="${expense.totalAmountOfPaymentsRequested}">ZAR 150.00</span></b></td>
             </tr>
         </table>
         <br>
@@ -54,7 +54,7 @@
     <br>
 
     <form method="post" action="/payment-request.action" enctype="application/x-www-form-urlencoded">
-        <input type="hidden" id="expense_UUID" name="expense_UUID" th:value="${expense_UUID}">
+        <input type="hidden" id="expense_UUID" name="expense_UUID" th:value="${expense.id}">
         <label for="email">The recipient's email
             <br>
             <input type="email" id="email" name="email" required autofocus />
@@ -63,10 +63,10 @@
         <br>
 
         <label for="amount">The amount they should pay (Maximum
-            <span th:text="${max_amount}" th:remove="tag"> </span>
+            <span th:text="${expense.totalAmountAvailableForPaymentRequests()}" th:remove="tag"> </span>
             )
             <br>
-            <input type="currency" id="amount" name="amount" th:max="${max_amount}" required>
+            <input type="currency" id="amount" name="amount" th:max="${expense.totalAmountAvailableForPaymentRequests()}" required>
             <br>
         </label>
         <br>
@@ -91,15 +91,6 @@
             } else {
                 hasPaid.item(i).textContent = "Yes";
             }
-        }
-    </script>
-
-    <!-- Script to format name of indebted  -->
-    <script>
-        const names = document.querySelectorAll('span[id="name"]');
-        for (let i = 0; i < names.length; i++ ) {
-            let s = names.item(i).textContent;
-            names.item(i).textContent = s.substring(0, s.indexOf("@"))
         }
     </script>
 
