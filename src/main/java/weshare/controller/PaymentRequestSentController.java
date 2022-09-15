@@ -1,21 +1,20 @@
 package weshare.controller;
 
 import io.javalin.http.Handler;
+import org.eclipse.jetty.server.Request;
 import org.javamoney.moneta.function.MonetaryFunctions;
 import org.jetbrains.annotations.NotNull;
 import weshare.model.Expense;
 import weshare.model.PaymentRequest;
 import weshare.model.Person;
+import weshare.model.WeShareException;
 import weshare.persistence.ExpenseDAO;
 import weshare.server.ServiceRegistry;
 import weshare.server.WeShareServer;
 
 import javax.money.MonetaryAmount;
 import javax.money.NumberValue;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static weshare.model.MoneyHelper.ZERO_RANDS;
@@ -27,21 +26,15 @@ public class PaymentRequestSentController {
         ExpenseDAO expensesDAO = ServiceRegistry.lookup(ExpenseDAO.class);
         Person personLoggedIn = WeShareServer.getPersonLoggedIn(context);
 
-        Collection<Expense> expenses = expensesDAO.findExpensesForPerson(personLoggedIn);
-        Collection<PaymentRequest> requestsSent = new ArrayList<>();
-
-        for(Expense expense: expenses) {
-            for(PaymentRequest request: expense.listOfPaymentRequests()) {
-                request.getPersonWhoShouldPayBack().getName();
-                request.getDescription();
-                request.daysLeftToPay();
-                request.getAmountToPay();
-                requestsSent.add(request);
-            }
-        }
-
+        Collection<PaymentRequest> requests = expensesDAO.findPaymentRequestsSent(personLoggedIn);
         Map<String, Object> viewModel = new HashMap<>();
-        viewModel.put("requestsSent", requestsSent);
+
+        requests.stream()
+                .map(PaymentRequest::getAmountToPay)
+                .reduce(MonetaryAmount::add)
+                .ifPresent(monetaryAmount -> viewModel.put("total", monetaryAmount));
+
+        viewModel.put("requestsSent", requests);
 
         context.render("payment-request-sent.html", viewModel);
     };
