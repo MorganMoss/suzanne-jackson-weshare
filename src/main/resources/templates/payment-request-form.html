@@ -27,27 +27,37 @@
     <div id="previous_requests" th:unless="${#lists.isEmpty(requests)}">
         <h2> Previous Payment Requests for this Expense </h2>
         <table>
-            <tr class="table-header-requests">
-                <td><u>Who</u></td>
-                <td><u>Due</u></td>
-                <td><u>Paid?</u></td>
-                <td><u>Amount</u></td>
-            </tr>
-            <th:block th:each="request: ${requests}">
-                <tr>
-                    <td><span id="name" th:text="${request.personWhoShouldPayBack.getName()}">bob</span></td>
-                    <td><span th:text="${request.dueDate}">05/09/2022</span></td>
-                    <td><span id="paid" th:text="${request.isPaid}">No</span></td>
-                    <td><span th:text="${request.amountToPay}">ZAR 120</span></td>
+            <thead>
+                <tr class="table-header-requests">
+                    <td><u>Who</u></td>
+                    <td><u>Due</u></td>
+                    <td><u>Paid?</u></td>
+                    <td><u>Amount</u></td>
                 </tr>
-            </th:block>
-        </table>
-        <hr>
-        <table>
-            <tr>
-                <td><span><b>Total Amount of Payments Requested</b></span></td>
-                <td><b><span th:text="${expense.totalAmountOfPaymentsRequested}">ZAR 150.00</span></b></td>
-            </tr>
+            </thead>
+            <tbody>
+                <tr th:block th:each="request: ${requests}">
+                    <td id="'paymentrequest_who_'+${request.id}"
+                        th:text="${request.personWhoShouldPayBack.getName()}"/>
+                    <td id="'paymentrequest_date_'+${request.id}"
+                        th:text="${request.dueDate}"/>
+                    <td id="'paymentrequest_paid_'+${request.id}">
+                        <span th:if="${request.isPaid}"
+                              th:text="Yes"/>
+                        <span th:unless="${request.isPaid}"
+                              th:text="No"/>
+                    </td>
+                    <td id="'paymentrequest_amount_'+${request.id}"
+                        th:text="${request.amountToPay}"/>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td><b>Total Amount of Payments Requested</b></td>
+                    <td><b><span th:id="total_paymentrequests"
+                        th:text="${expense.totalAmountOfPaymentsRequested}"/></b></td>
+                </tr>
+            </tfoot>
         </table>
         <br>
     </div>
@@ -64,7 +74,6 @@
 
         <label for="amount">The amount they should pay (Maximum
             <span th:text="${expense.totalAmountAvailableForPaymentRequests()}" th:remove="tag"> </span>
-            )
             <br>
             <input type="currency" id="amount" name="amount" th:max="${expense.totalAmountAvailableForPaymentRequests()}" required>
             <br>
