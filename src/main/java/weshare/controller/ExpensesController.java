@@ -13,6 +13,7 @@ import weshare.server.WeShareServer;
 import javax.money.MonetaryAmount;
 import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static weshare.model.MoneyHelper.amountOf;
 
@@ -23,6 +24,10 @@ public class ExpensesController {
         Person personLoggedIn = WeShareServer.getPersonLoggedIn(context);
 
         Collection<Expense> expenses = expensesDAO.findExpensesForPerson(personLoggedIn);
+        expenses = expenses.stream()
+                .filter(expense -> !expense.isFullyPaidByOthers())
+                .collect(Collectors.toUnmodifiableList());
+        System.out.println(expenses);
         Collection<MonetaryAmount> netExpenseTotal = netExpensesList(expenses);
         MonetaryAmount netExpensesTotal = netExpensesTotal(netExpenseTotal);
 

@@ -96,6 +96,20 @@ public class PaymentRequestController {
 
 
     public static final Handler sent = context -> {
+        ExpenseDAO expensesDAO = ServiceRegistry.lookup(ExpenseDAO.class);
+        Person personLoggedIn = WeShareServer.getPersonLoggedIn(context);
+
+        Collection<PaymentRequest> requests = expensesDAO.findPaymentRequestsSent(personLoggedIn);
+        Map<String, Object> viewModel = new HashMap<>();
+
+        requests.stream()
+                .map(PaymentRequest::getAmountToPay)
+                .reduce(MonetaryAmount::add)
+                .ifPresent(monetaryAmount -> viewModel.put("total", monetaryAmount));
+
+        viewModel.put("requestsSent", requests);
+
+        context.render("payment-request-sent.html", viewModel);
     };
 
     public static final Handler received = context -> {
