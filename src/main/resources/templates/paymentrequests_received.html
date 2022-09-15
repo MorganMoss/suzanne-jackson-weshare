@@ -29,7 +29,7 @@
                         <form method="post" action="/paymentrequests_received.action" enctype="application/x-www-form-urlencoded">
                             <input type="hidden" name="request_id" th:value="${request.id}">
                             <input type="hidden" name="expense_id" th:value="${request.expense.id}">
-                            <input id="submit" type="submit" value="Pay"/>
+                            <input class="pay" id="submit" type="submit" value="Pay"/>
                         </form>
                     </td>
                     <td th:if="${request.isPaid}"

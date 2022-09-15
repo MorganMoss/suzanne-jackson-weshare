@@ -111,6 +111,11 @@ div.stacktrace {
     font-family: monospace;
 }
 
+.pay {
+    min-width: 4rem;
+    height: 2.5rem;
+}
+
 .table {
     border-collapse: collapse;
     width: 82.5%;
@@ -133,7 +138,13 @@ div.stacktrace {
 }
 
 
+
 @media (max-width: 700px) {
+
+    .pay {
+        position: absolute;
+        right: 0;
+    }
 
     .table {
         width: 80%;
