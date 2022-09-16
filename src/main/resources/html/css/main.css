@@ -111,9 +111,24 @@ div.stacktrace {
     font-family: monospace;
 }
 
+#payForm {
+    height: 0rem;
+    overflow: hidden;
+}
+
 .pay {
-    min-width: 4rem;
+    padding: 0;
     height: 2.5rem;
+    translate: 0 -1.75rem;
+}
+
+.paid {
+    font-family: sans-serif;
+    overflow: hidden;
+    height: 2.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+    translate: 1.75rem 0;
 }
 
 .table {
@@ -137,13 +152,18 @@ div.stacktrace {
     font-weight: 600;
 }
 
-
-
 @media (max-width: 700px) {
 
     .pay {
         position: absolute;
         right: 0;
+        translate: 0 -0.9rem;
+
+    }
+
+    .paid {
+        translate: 0 0.5rem;
+        font-size: 1.1rem;
     }
 
     .table {
@@ -162,7 +182,9 @@ div.stacktrace {
         padding: 10px;
     }
 
-    .table tbody tr {
+    .table tbody tr  {
+        border-radius: 5px;
+        padding: 2.5px;
         border: 1px solid #adadad;
         margin-bottom: 1rem;
     }

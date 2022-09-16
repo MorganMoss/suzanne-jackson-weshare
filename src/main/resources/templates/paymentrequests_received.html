@@ -26,13 +26,13 @@
                     <td th:text="${request.daysLeftToPay}" data-label="When">4</td>
                     <td th:text="${request.getAmountToPay}" data-label="Payments Requests">ZAR 150</td>
                     <td th:unless="${request.isPaid}==true" data-label="">
-                        <form method="post" action="/paymentrequests_received.action" enctype="application/x-www-form-urlencoded">
+                        <form id="payForm" method="post" action="/paymentrequests_received.action" enctype="application/x-www-form-urlencoded">
                             <input type="hidden" name="request_id" th:value="${request.id}">
                             <input type="hidden" name="expense_id" th:value="${request.expense.id}">
                             <input class="pay" id="submit" type="submit" value="Pay"/>
                         </form>
                     </td>
-                    <td th:if="${request.isPaid}"
+                    <td class="paid" th:if="${request.isPaid}"
                         th:id="'paid_'+(${requestStat.index}+1)"
                         >Paid
                     </td>
